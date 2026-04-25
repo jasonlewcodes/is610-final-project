@@ -232,3 +232,49 @@ def test_divide_by_zero() -> None:
     # Assert that the exception message contains the expected error message
     assert "Cannot divide by zero!" in str(excinfo.value), \
         f"Expected error message 'Cannot divide by zero!', but got '{excinfo.value}'"
+
+# ---------------------------------------------
+# Unit Tests for the 'exponentiation' Function
+# ---------------------------------------------
+
+@pytest.mark.parametrize(
+    "a, b, expected",
+    [
+        (2, 3, 8),           # Test exponentiation of two positive integers
+        (-2, 3, -8),        # Test exponentiation of a negative base with odd exponent
+        (2.5, 2, 6.25),     # Test exponentiation of two positive floats
+        (-2.5, 2, -6.25),    # Test exponentiation of a negative float with even exponent
+        (0, 0, 1),            # Test exponentiation with zero base and zero exponent
+    ],
+    ids=[
+        "exponentiation_two_positive_integers",
+        "exponentiation_negative_base_odd_exponent",
+        "exponentiation_two_positive_floats",
+        "exponentiation_negative_base_even_exponent",
+        "exponentiation_zero_base_zero_exponent",
+    ]
+)
+def test_exponentiation(a: Number, b: Number, expected: Number) -> None:
+    """
+    Test the 'exponentiation' function with various combinations of integers and floats.
+
+    This parameterized test verifies that the 'exponentiation' function correctly exponentiates two numbers.
+
+    Parameters:
+    - a (Number): The base number.
+    - b (Number): The exponent.
+    - expected (Number): The expected result of the exponentiation.
+
+    Steps:
+    1. Call the 'exponentiation' function with arguments 'a' and 'b'.
+    2. Assert that the result is equal to 'expected'.
+
+    Example:
+    >>> test_exponentiation(2, 3, 8)
+    >>> test_exponentiation(-2, 3, -8)
+    """
+    # Call the 'exponentiation' function with the provided arguments
+    result = exponentiation(a, b)
+    
+    # Assert that the result of exponentiation(a, b) matches the expected value
+    assert result == expected, f"Expected exponentiation({a}, {b}) to be {expected}, but got {result}"
