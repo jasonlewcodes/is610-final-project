@@ -243,7 +243,7 @@ def test_divide_by_zero() -> None:
         (2, 3, 8),           # Test exponentiate of two positive integers
         (-2, 3, -8),        # Test exponentiate of a negative base with odd exponent
         (2.5, 2, 6.25),     # Test exponentiate of two positive floats
-        (-2.5, 2, -6.25),    # Test exponentiate of a negative float with even exponent
+        (-2.5, 2, 6.25),    # Test exponentiate of a negative float with even exponent
         (0, 0, 1),            # Test exponentiate with zero base and zero exponent
     ],
     ids=[
