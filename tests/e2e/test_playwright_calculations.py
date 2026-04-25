@@ -206,6 +206,41 @@ def test_create_calculation_division_via_ui(page, fastapi_server):
 
 
 # ---------------------------------------------------------------------------
+# Positive: Create exponentiation calculation via dashboard UI
+# ---------------------------------------------------------------------------
+@pytest.mark.e2e
+def test_create_calculation_exponentiation_via_ui(page, fastapi_server):
+    """Fill the dashboard form with an exponentiation, submit, confirm 201 from the
+    server, and verify the success alert contains the correct result (256)."""
+    base = _base(fastapi_server)
+    username, _, token = _seed_user_and_login(base)
+
+    _set_auth(page, base, token, username)
+    page.goto(f"{base}/dashboard")
+    page.wait_for_load_state("domcontentloaded")
+
+    page.select_option("#calcType", "exponentiation")
+    page.fill("#calcInputs", "2, 2, 3")
+
+    with page.expect_response(
+        lambda r: r.url.endswith("/calculations") and r.request.method == "POST"
+    ) as resp_info:
+        page.click('button[type="submit"]')
+
+    resp = resp_info.value
+    assert resp.status == 201, f"Expected 201, got {resp.status}: {resp.text()}"
+    assert resp.json()["result"] == 256, (
+        f"Expected result 256, got {resp.json()['result']}"
+    )
+
+    page.wait_for_selector("#successAlert:not(.hidden)", timeout=5000)
+    success_text = page.inner_text("#successMessage")
+    assert "256" in success_text, (
+        f"Expected '256' in success message, got: {success_text!r}"
+    )
+
+
+# ---------------------------------------------------------------------------
 # Positive: Retrieve calculation via the view page
 # ---------------------------------------------------------------------------
 @pytest.mark.e2e
