@@ -7,6 +7,7 @@ from app.models.calculation import (
     Subtraction,
     Multiplication,
     Division,
+    Exponentiation,
 )
 
 # Helper function to create a dummy user_id for testing.
@@ -50,6 +51,15 @@ def test_division_get_result():
     # Expected: 100 / 2 / 5 = 10
     result = division.get_result()
     assert result == 10, f"Expected 10, got {result}"
+
+def test_exponentiation_get_result():
+    """
+    Test that Exponentiation.get_result returns the correct result.
+    """
+    inputs = [2, 2, 3]
+    exponentiation = Exponentiation(user_id=dummy_user_id(), inputs=inputs)
+    result = exponentiation.get_result()
+    assert result == 256, f"Expected 256, got {result}"
 
 def test_division_by_zero():
     """
@@ -116,6 +126,20 @@ def test_calculation_factory_division():
     assert isinstance(calc, Division), "Factory did not return a Division instance."
     assert calc.get_result() == 10, "Incorrect division result."
 
+def test_calculation_factory_exponentiation():
+    """
+    Test the Calculation.create factory method for exponentiation.
+    """
+    inputs = [2, 2, 3]
+    calc = Calculation.create(
+        calculation_type='exponentiation',
+        user_id=dummy_user_id(),
+        inputs=inputs,
+    )
+    # Expected: 2^(2^3) = 2^8 = 256
+    assert isinstance(calc, Exponentiation), "Factory did not return an Exponentiation instance."
+    assert calc.get_result() == 256, "Incorrect exponentiation result."
+
 def test_calculation_factory_invalid_type():
     """
     Test that Calculation.create raises a ValueError for an unsupported calculation type.
@@ -150,3 +174,11 @@ def test_invalid_inputs_for_division():
     division = Division(user_id=dummy_user_id(), inputs=[10])
     with pytest.raises(ValueError, match="Inputs must be a list with at least two numbers."):
         division.get_result()
+
+def test_invalid_inputs_for_exponentiation():
+    """
+    Test that providing non-list inputs to Exponentiation.get_result raises a ValueError.
+    """
+    exponentiation = Exponentiation(user_id=dummy_user_id(), inputs="not-a-list")
+    with pytest.raises(ValueError, match="Inputs must be a list of numbers."):
+        exponentiation.get_result()
