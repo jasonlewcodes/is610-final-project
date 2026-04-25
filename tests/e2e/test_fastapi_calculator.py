@@ -233,8 +233,8 @@ def test_create_calculation_exponentiation(base_url: str):
     user_data = {
         "first_name": "Calc",
         "last_name": "Exponentiation",
-        "email": f"calc.exponentiation{uuid4()}@example.com",
-        "username": f"calc_exponentiation_{uuid4()}",
+        "email": f"calc.exp{uuid4()}@example.com",
+        "username": f"calc_exp_{uuid4()}",
         "password": "SecurePass123!",
         "confirm_password": "SecurePass123!"
     }
